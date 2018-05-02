@@ -83,7 +83,11 @@ users: []
 ```
 
 #### 5、启动Kubelet服务
+
 [root@node ~]# systemctl daemon-reload 
+
 [root@node ~]# systemctl enable kubelet.service
+
 [root@node ~]# systemctl start kubelet.service
+
 [root@node ~]# systemctl status kubelet.service
