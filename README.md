@@ -16,18 +16,25 @@ Docker版本：1.13.1
 yum update -y
 
 #### 2、关闭防火墙
+
 [root@node ~]# systemctl disable firewalld
+
 [root@node ~]# systemctl stop firewalld
 
 #### 3、安装docker
+
 [root@node ~]# yum install docker-1.13.1  
 
 #### 4、下载kubernetes
+
 [root@node ~]# wget https://github.com/kubernetes/kubernetes/releases/download/v1.9.1/kubernetes.tar.gz
 
 #### 5、配置Kubelet
+
 [root@node ~]# mkdir -p /etc/kubernetes  
+
 [root@node ~]# mkdir -p /var/lib/kubelet
+
 [root@node ~]# vim /usr/lib/systemd/system/kubelet.service
 
 
