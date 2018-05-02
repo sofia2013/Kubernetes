@@ -57,13 +57,13 @@ ExecStart=/usr/bin/kubelet \
   --cgroup-driver=systemd \
   --fail-swap-on=false \
   --runtime-cgroups=/systemd/system.slice 
-  --kubelet-cgroups=/systemd/system.slice
   --logtostderr=true \
   --v=2
 RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
+
 ```
 
 [root@node ~]# vim /etc/kubernetes/kubelet.kubeconfig
@@ -75,7 +75,7 @@ apiVersion: v1
 clusters:
 - cluster:
     insecure-skip-tls-verify: true
-    server: http://47.52.159.14:8080
+    server: http://172.31.240.42:8080
   name: kubernetes
 contexts:
 - context:
