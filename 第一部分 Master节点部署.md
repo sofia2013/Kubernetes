@@ -1,22 +1,31 @@
 # Master节点部署
 ## 环境参数
+OS CentOS 7
+kubernetes 1.9.1
+etcd 3.2.9
+
 ## 部署详情
 ### 1、更新内核
+```
 [root@k8s-master ~]# yum update -y
-
+```
 ### 2、关闭防火墙
+```
 [root@k8s-master ~]# systemctl disable firewalld
 [root@k8s-master ~]# systemctl stop firewalld
-
+```
 ### 3、下载二进制安装文件
+```
 [root@k8s-master ~]# wget https://github.com/kubernetes/kubernetes/releases/download/v1.9.1/kubernetes.tar.gz
 [root@k8s-master ~]# wget https://github.com/coreos/etcd/releases/download/v3.2.9/etcd-v3.2.9-linux-amd64.tar.gz
-
+```
 ### 4、Etcd配置
-[root@iZod5e1vrxu935Z etcd-v3.2.9-linux-amd64]# cp etcd /usr/bin
-[root@iZod5e1vrxu935Z etcd-v3.2.9-linux-amd64]# cp etcdctl /usr/bin
-[root@iZod5e1vrxu935Z etcd-v3.2.9-linux-amd64]# vim /usr/lib/systemd/system/etcd.service
-######################etcd.service######################
+```
+[root@k8s-master etcd-v3.2.9-linux-amd64]# cp etcd /usr/bin
+[root@k8s-master etcd-v3.2.9-linux-amd64]# cp etcdctl /usr/bin
+[root@k8s-master etcd-v3.2.9-linux-amd64]# vim /usr/lib/systemd/system/etcd.service
+```
+```
 [Unit]
 Description=etcd.service
 
@@ -30,13 +39,13 @@ ExecStart=/usr/bin/etcd
 
 [Install]
 WantedBy=multi-user.target
-######################etcd.service######################
-
+```
+```
 [root@k8s-master ~]# mkdir -p /var/lib/etcd
 [root@k8s-master ~]# mkdir -p /etc/etcd/
 [root@k8s-master ~]# vim /etc/etcd/etcd.conf
-
-######################etcd.conf######################
+```
+```
 #[Member]
 #ETCD_CORS=""
 ETCD_DATA_DIR="/var/lib/etcd/"
@@ -106,25 +115,24 @@ ETCD_ADVERTISE_CLIENT_URLS="http://172.17.172.197:2379"
 #
 #[Auth]
 #ETCD_AUTH_TOKEN="simple"
-######################etcd.conf######################
-
+```
+```
 [root@iZod5e1vrxu935Z etcd-v3.2.9-linux-amd64]# systemctl daemon-reload
 [root@iZod5e1vrxu935Z etcd-v3.2.9-linux-amd64]# systemctl enable etcd.service
 [root@iZod5e1vrxu935Z etcd-v3.2.9-linux-amd64]# systemctl start etcd.service
 [root@iZod5e1vrxu935Z etcd-v3.2.9-linux-amd64]# systemctl status etcd.service
 [root@iZod5e1vrxu935Z etcd-v3.2.9-linux-amd64]# etcdctl cluster-health
-
+```
 ### 5、Kubernetes 配置
 
 #### 1)kube-apiserver 配置
-
+```
 [root@iZod5e1vrxu935Z bin]# cp kube-apiserver /usr/bin
 [root@iZod5e1vrxu935Z bin]# cp kube-controller-manager /usr/bin
 [root@iZod5e1vrxu935Z bin]# cp kube-scheduler /usr/bin
-
 [root@iZod5e1vrxu935Z bin]# vim /usr/lib/systemd/system/kube-apiserver.service
-
-######################kube-apiserver.service######################
+```
+```
 [Unit]
 Description=Kubernetes API Server
 After=etcd.service
@@ -146,11 +154,11 @@ LimitNOFILE=65536
 
 [Install]
 WantedBy=multi-user.target
-######################kube-apiserver.service######################
-
+```
+```
 [root@k8s-master  bin]# vim /etc/kubernetes/apiserver
-
-######################apiserver######################
+```
+```
 KUBE_API_ADDRESS="--insecure-bind-address=0.0.0.0"
 KUBE_API_PORT="--insecure-port=8080"
 KUBE_ETCD_SERVERS="--etcd-servers=http://172.17.172.197:2379"
@@ -158,8 +166,8 @@ KUBE_SERVICE_ADDRESSES="--service-cluster-ip-range=169.169.0.0/16"
 KUBE_ADMISSION_CONTROL="--admission-control=NamespaceLifecycle,LimitRanger,SecurityContextDeny,ResourceQuota"
 KUBE_API_LOG="--logtostderr=false --log-dir=/home/k8s-t/log/kubernets --v=2"
 KUBE_API_ARGS=" "
-######################apiserver######################
-
+```
+```
 [root@k8s-master bin]# mkdir -p /etc/kubernetes
 [root@k8s-master bin]# mkdir -p /home/k8s-t/log/kubernets
 
@@ -167,24 +175,27 @@ KUBE_API_ARGS=" "
 [root@k8s-master bin]# systemctl enable kube-apiserver.service
 [root@k8s-master bin]# systemctl start kube-apiserver.service
 [root@k8s-master bin]# systemctl status kube-apiserver.service
-
+```
 #### 2)kube-controller-manager 配置
+```
 [root@k8s-master bin]# vim /usr/lib/systemd/system/kube-controller-manager.service
 [root@k8s-master bin]# vim /etc/kubernetes/controller-manager
 [root@k8s-master bin]# systemctl daemon-reload 
 [root@k8s-master bin]# systemctl enable kube-controller-manager.service
 [root@k8s-master bin]# systemctl start kube-controller-manager.service
 [root@k8s-master bin]# systemctl status kube-controller-manager.service
-
+```
 #### 3)kube-scheduler 配置
+```
 [root@k8s-master bin]# vim /usr/lib/systemd/system/kube-scheduler.service
 [root@k8s-master bin]# vim /etc/kubernetes/scheduler
 [root@k8s-master bin]# systemctl daemon-reload 
 [root@k8s-master bin]# systemctl enable kube-scheduler.service
 [root@k8s-master bin]# systemctl start kube-scheduler.service
 [root@k8s-master bin]# systemctl status kube-scheduler.service
-
+```
 #### 4)kubectl 配置
+```
 [root@k8s-master bin]# cp kubectl /usr/bin
 
 [root@k8s-master bin]# kubectl version
@@ -207,6 +218,8 @@ Switched to context "kubernetes".
 [root@k8s-master bin]# kubectl -s http://172.17.172.197:8080 version
 Client Version: version.Info{Major:"1", Minor:"9", GitVersion:"v1.9.1", GitCommit:"3a1c9449a956b6026f075fa3134ff92f7d55f812", GitTreeState:"clean", BuildDate:"2018-01-04T11:52:23Z", GoVersion:"go1.9.2", Compiler:"gc", Platform:"linux/amd64"}
 Server Version: version.Info{Major:"1", Minor:"9", GitVersion:"v1.9.1", GitCommit:"3a1c9449a956b6026f075fa3134ff92f7d55f812", GitTreeState:"clean", BuildDate:"2018-01-04T11:40:06Z", GoVersion:"go1.9.2", Compiler:"gc", Platform:"linux/amd64"}
+
 [root@k8s-master bin]# kubectl get nodes
 NAME            STATUS    ROLES     AGE       VERSION
 172.17.90.213   Ready     <none>    14s       v1.9.1
+```
