@@ -1,25 +1,26 @@
-# Master节点部署
-## 环境参数
+# Kubernetes
+## Master节点部署
+### 环境参数
 OS CentOS 7
 kubernetes 1.9.1
 etcd 3.2.9
 
-## 部署详情
-### 1、更新内核
+### 部署详情
+#### 1、更新内核
 ```
 [root@k8s-master ~]# yum update -y
 ```
-### 2、关闭防火墙
+#### 2、关闭防火墙
 ```
 [root@k8s-master ~]# systemctl disable firewalld
 [root@k8s-master ~]# systemctl stop firewalld
 ```
-### 3、下载二进制安装文件
+#### 3、下载二进制安装文件
 ```
 [root@k8s-master ~]# wget https://github.com/kubernetes/kubernetes/releases/download/v1.9.1/kubernetes.tar.gz
 [root@k8s-master ~]# wget https://github.com/coreos/etcd/releases/download/v3.2.9/etcd-v3.2.9-linux-amd64.tar.gz
 ```
-### 4、Etcd配置
+#### 4、Etcd配置
 ```
 [root@k8s-master etcd-v3.2.9-linux-amd64]# cp etcd /usr/bin
 [root@k8s-master etcd-v3.2.9-linux-amd64]# cp etcdctl /usr/bin
@@ -123,9 +124,9 @@ ETCD_ADVERTISE_CLIENT_URLS="http://172.17.172.197:2379"
 [root@iZod5e1vrxu935Z etcd-v3.2.9-linux-amd64]# systemctl status etcd.service
 [root@iZod5e1vrxu935Z etcd-v3.2.9-linux-amd64]# etcdctl cluster-health
 ```
-### 5、Kubernetes 配置
+#### 5、Kubernetes 配置
 
-#### 1)kube-apiserver 配置
+##### 1)kube-apiserver 配置
 ```
 [root@iZod5e1vrxu935Z bin]# cp kube-apiserver /usr/bin
 [root@iZod5e1vrxu935Z bin]# cp kube-controller-manager /usr/bin
@@ -176,7 +177,7 @@ KUBE_API_ARGS=" "
 [root@k8s-master bin]# systemctl start kube-apiserver.service
 [root@k8s-master bin]# systemctl status kube-apiserver.service
 ```
-#### 2)kube-controller-manager 配置
+##### 2)kube-controller-manager 配置
 ```
 [root@k8s-master bin]# vim /usr/lib/systemd/system/kube-controller-manager.service
 [root@k8s-master bin]# vim /etc/kubernetes/controller-manager
@@ -185,7 +186,7 @@ KUBE_API_ARGS=" "
 [root@k8s-master bin]# systemctl start kube-controller-manager.service
 [root@k8s-master bin]# systemctl status kube-controller-manager.service
 ```
-#### 3)kube-scheduler 配置
+##### 3)kube-scheduler 配置
 ```
 [root@k8s-master bin]# vim /usr/lib/systemd/system/kube-scheduler.service
 [root@k8s-master bin]# vim /etc/kubernetes/scheduler
@@ -194,7 +195,7 @@ KUBE_API_ARGS=" "
 [root@k8s-master bin]# systemctl start kube-scheduler.service
 [root@k8s-master bin]# systemctl status kube-scheduler.service
 ```
-#### 4)kubectl 配置
+##### 4)kubectl 配置
 ```
 [root@k8s-master bin]# cp kubectl /usr/bin
 
