@@ -1,4 +1,4 @@
-# Kubernetes
+# Kubernetes 1.9.1 二进制集群部署
 ## Master节点部署
 ### 环境参数
 OS CentOS 7
