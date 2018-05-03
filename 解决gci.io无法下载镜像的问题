@@ -1,0 +1,44 @@
+
+解决gci.io无法下载镜像的问题
+
+docker tag k8s.gcr.io/kube-apiserver-amd64:v1.10.2 localhost:5000/k8s.gcr.io/kube-apiserver-amd64:v1.10.2
+docker tag k8s.gcr.io/kube-controller-manager-amd64:v1.10.2 localhost:5000/k8s.gcr.io/kube-controller-manager-amd64:v1.10.2
+docker tag k8s.gcr.io/kube-scheduler-amd64:v1.10.2 k8s.gcr.io/kube-scheduler-amd64:v1.10.2 localhost:5000/k8s.gcr.io/kube-scheduler-amd64:v1.10.2
+docker tag kube-proxy-amd64:latest localhost:5000/kube-proxy-amd64:latest
+docker tag k8s.gcr.io/kube-proxy-amd64:v1.10.2 localhost:5000/k8s.gcr.io/kube-proxy-amd64:v1.10.2 
+docker tag k8s.gcr.io/etcd-amd64:3.1.12 localhost:5000/k8s.gcr.io/etcd-amd64:3.1.12
+docker tag docker.io/registry:2 localhost:5000/docker.io/registry:2
+docker tag k8s.gcr.io/pause-amd64:3.1 localhost:5000/k8s.gcr.io/pause-amd64:3.1   
+
+docker push localhost:5000/k8s.gcr.io/kube-apiserver-amd64:v1.10.2
+docker push localhost:5000/k8s.gcr.io/kube-controller-manager-amd64:v1.10.2
+docker push localhost:5000/k8s.gcr.io/kube-scheduler-amd64:v1.10.2
+docker push localhost:5000/kube-proxy-amd64:latest
+docker push localhost:5000/k8s.gcr.io/kube-proxy-amd64:v1.10.2 
+docker push localhost:5000/k8s.gcr.io/etcd-amd64:3.1.12
+docker push localhost:5000/docker.io/registry:2
+docker push localhost:5000/k8s.gcr.io/pause-amd64:3.1   
+
+kubeadm-master服务器操作
+
+在”/etc/docker/“目录下，创建”daemon.json“文件。在文件中写入：
+{ "insecure-registries":["registry-server IP:5000"] }
+systemctl restart docker.service
+
+docker pull registry-server IP:5000/k8s.gcr.io/kube-apiserver-amd64:v1.10.2
+docker pull registry-server IP:5000/k8s.gcr.io/kube-controller-manager-amd64:v1.10.2
+docker pull registry-server IP:5000/k8s.gcr.io/kube-scheduler-amd64:v1.10.2
+docker pull registry-server IP:5000/kube-proxy-amd64:latest
+docker pull registry-server IP:5000/k8s.gcr.io/kube-proxy-amd64:v1.10.2 
+docker pull registry-server IP:5000/k8s.gcr.io/etcd-amd64:3.1.12
+docker pull registry-server IP:5000/docker.io/registry:2
+docker pull registry-server IP:5000/k8s.gcr.io/pause-amd64:3.1 
+
+docker tag registry-server IP:5000/k8s.gcr.io/kube-apiserver-amd64:v1.10.2  k8s.gcr.io/kube-apiserver-amd64:v1.10.2
+docker tag registry-server IP:5000/k8s.gcr.io/kube-controller-manager-amd64:v1.10.2 k8s.gcr.io/kube-controller-manager-amd64:v1.10.2
+docker tag registry-server IP:5000/k8s.gcr.io/kube-scheduler-amd64:v1.10.2 k8s.gcr.io/kube-scheduler-amd64:v1.10.2
+docker tag registry-server IP:5000/kube-proxy-amd64:latest kube-proxy-amd64:latest
+docker tag registry-server IP:5000/k8s.gcr.io/kube-proxy-amd64:v1.10.2 k8s.gcr.io/kube-proxy-amd64:v1.10.2
+docker tag registry-server IP:5000/k8s.gcr.io/etcd-amd64:3.1.12 k8s.gcr.io/etcd-amd64:3.1.12
+docker tag registry-server IP:5000/docker.io/registry:2 docker.io/registry:2
+docker tag registry-server IP:5000/k8s.gcr.io/pause-amd64:3.1 k8s.gcr.io/pause-amd64:3.1 
