@@ -32,9 +32,9 @@ ExecStart=/usr/bin/etcd
 WantedBy=multi-user.target
 ######################etcd.service######################
 
-[root@iZod5e1vrxu935Z etcd-v3.2.9-linux-amd64]# mkdir -p /var/lib/etcd
-[root@iZod5e1vrxu935Z etcd-v3.2.9-linux-amd64]# mkdir -p /etc/etcd/
-[root@iZod5e1vrxu935Z etcd-v3.2.9-linux-amd64]#  vim /etc/etcd/etcd.conf
+[root@k8s-master ~]# mkdir -p /var/lib/etcd
+[root@k8s-master ~]# mkdir -p /etc/etcd/
+[root@k8s-master ~]# vim /etc/etcd/etcd.conf
 
 ######################etcd.conf######################
 #[Member]
@@ -112,12 +112,7 @@ ETCD_ADVERTISE_CLIENT_URLS="http://172.17.172.197:2379"
 [root@iZod5e1vrxu935Z etcd-v3.2.9-linux-amd64]# systemctl enable etcd.service
 [root@iZod5e1vrxu935Z etcd-v3.2.9-linux-amd64]# systemctl start etcd.service
 [root@iZod5e1vrxu935Z etcd-v3.2.9-linux-amd64]# systemctl status etcd.service
-● etcd.service
-   Active: active (running) since Thu 2018-05-03 09:53:30 CST; 5s ago
-...
 [root@iZod5e1vrxu935Z etcd-v3.2.9-linux-amd64]# etcdctl cluster-health
-member 8e9e05c52164694d is healthy: got healthy result from http://172.17.172.197:2379
-cluster is healthy
 
 ### 5、Kubernetes 配置
 
@@ -153,7 +148,7 @@ LimitNOFILE=65536
 WantedBy=multi-user.target
 ######################kube-apiserver.service######################
 
-[root@iZod5e1vrxu935Z bin]# vim /etc/kubernetes/apiserver
+[root@k8s-master  bin]# vim /etc/kubernetes/apiserver
 
 ######################apiserver######################
 KUBE_API_ADDRESS="--insecure-bind-address=0.0.0.0"
@@ -165,53 +160,53 @@ KUBE_API_LOG="--logtostderr=false --log-dir=/home/k8s-t/log/kubernets --v=2"
 KUBE_API_ARGS=" "
 ######################apiserver######################
 
-[root@iZod5e1vrxu935Z bin]# mkdir -p /etc/kubernetes
-[root@iZod5e1vrxu935Z bin]# mkdir -p /home/k8s-t/log/kubernets
+[root@k8s-master bin]# mkdir -p /etc/kubernetes
+[root@k8s-master bin]# mkdir -p /home/k8s-t/log/kubernets
 
-[root@iZod5e1vrxu935Z bin]# systemctl daemon-reload 
-[root@iZod5e1vrxu935Z bin]# systemctl enable kube-apiserver.service
-Created symlink from /etc/systemd/system/multi-user.target.wants/kube-apiserver.service to /usr/lib/systemd/system/kube-apiserver.service.
-[root@iZod5e1vrxu935Z bin]# systemctl start kube-apiserver.service
-[root@iZod5e1vrxu935Z bin]#  systemctl status kube-apiserver.service
+[root@k8s-master bin]# systemctl daemon-reload 
+[root@k8s-master bin]# systemctl enable kube-apiserver.service
+[root@k8s-master bin]# systemctl start kube-apiserver.service
+[root@k8s-master bin]# systemctl status kube-apiserver.service
 
 #### 2)kube-controller-manager 配置
-[root@iZod5e1vrxu935Z bin]# vim /usr/lib/systemd/system/kube-controller-manager.service
-[root@iZod5e1vrxu935Z bin]# vim /etc/kubernetes/controller-manager
-[root@iZod5e1vrxu935Z bin]# systemctl daemon-reload 
-[root@iZod5e1vrxu935Z bin]# systemctl enable kube-controller-manager.service
-[root@iZod5e1vrxu935Z bin]# systemctl start kube-controller-manager.service
-[root@iZod5e1vrxu935Z bin]# systemctl status kube-controller-manager.service
+[root@k8s-master bin]# vim /usr/lib/systemd/system/kube-controller-manager.service
+[root@k8s-master bin]# vim /etc/kubernetes/controller-manager
+[root@k8s-master bin]# systemctl daemon-reload 
+[root@k8s-master bin]# systemctl enable kube-controller-manager.service
+[root@k8s-master bin]# systemctl start kube-controller-manager.service
+[root@k8s-master bin]# systemctl status kube-controller-manager.service
 
 #### 3)kube-scheduler 配置
-[root@iZod5e1vrxu935Z bin]# vim /usr/lib/systemd/system/kube-scheduler.service
-[root@iZod5e1vrxu935Z bin]# vim /etc/kubernetes/scheduler
-[root@iZod5e1vrxu935Z bin]# systemctl daemon-reload 
-[root@iZod5e1vrxu935Z bin]# systemctl enable kube-scheduler.service
-Created symlink from /etc/systemd/system/multi-user.target.wants/kube-scheduler.service to /usr/lib/systemd/system/kube-scheduler.service.
-[root@iZod5e1vrxu935Z bin]# systemctl start kube-scheduler.service
-[root@iZod5e1vrxu935Z bin]# systemctl status kube-scheduler.service
+[root@k8s-master bin]# vim /usr/lib/systemd/system/kube-scheduler.service
+[root@k8s-master bin]# vim /etc/kubernetes/scheduler
+[root@k8s-master bin]# systemctl daemon-reload 
+[root@k8s-master bin]# systemctl enable kube-scheduler.service
+[root@k8s-master bin]# systemctl start kube-scheduler.service
+[root@k8s-master bin]# systemctl status kube-scheduler.service
 
 #### 4)kubectl 配置
-[root@iZod5e1vrxu935Z bin]# cp kubectl /usr/bin
-[root@iZod5e1vrxu935Z bin]# kubectl version
+[root@k8s-master bin]# cp kubectl /usr/bin
+
+[root@k8s-master bin]# kubectl version
 Client Version: version.Info{Major:"1", Minor:"9", GitVersion:"v1.9.1", GitCommit:"3a1c9449a956b6026f075fa3134ff92f7d55f812", GitTreeState:"clean", BuildDate:"2018-01-04T11:52:23Z", GoVersion:"go1.9.2", Compiler:"gc", Platform:"linux/amd64"}
 Server Version: version.Info{Major:"1", Minor:"9", GitVersion:"v1.9.1", GitCommit:"3a1c9449a956b6026f075fa3134ff92f7d55f812", GitTreeState:"clean", BuildDate:"2018-01-04T11:40:06Z", GoVersion:"go1.9.2", Compiler:"gc", Platform:"linux/amd64"}
-[root@iZod5e1vrxu935Z bin]# kubectl get componentstatus
+
+[root@k8s-master bin]# kubectl get componentstatus
 NAME                 STATUS    MESSAGE              ERROR
 controller-manager   Healthy   ok                   
 scheduler            Healthy   ok                   
 etcd-0               Healthy   {"health": "true"}   
 
-[root@iZod5e1vrxu935Z bin]# kubectl config set-cluster kubernetes --server=http://172.17.172.197:8080
+[root@k8s-master bin]# kubectl config set-cluster kubernetes --server=http://172.17.172.197:8080
 Cluster "kubernetes" set.
-[root@iZod5e1vrxu935Z bin]# kubectl config set-context kubernetes --cluster=kubernetes
+[root@k8s-master bin]# kubectl config set-context kubernetes --cluster=kubernetes
 Context "kubernetes" created.
-[root@iZod5e1vrxu935Z bin]# kubectl config use-context kubernetes
+[root@k8s-master bin]# kubectl config use-context kubernetes
 Switched to context "kubernetes".
 
-[root@iZod5e1vrxu935Z bin]# kubectl -s http://172.17.172.197:8080 version
+[root@k8s-master bin]# kubectl -s http://172.17.172.197:8080 version
 Client Version: version.Info{Major:"1", Minor:"9", GitVersion:"v1.9.1", GitCommit:"3a1c9449a956b6026f075fa3134ff92f7d55f812", GitTreeState:"clean", BuildDate:"2018-01-04T11:52:23Z", GoVersion:"go1.9.2", Compiler:"gc", Platform:"linux/amd64"}
 Server Version: version.Info{Major:"1", Minor:"9", GitVersion:"v1.9.1", GitCommit:"3a1c9449a956b6026f075fa3134ff92f7d55f812", GitTreeState:"clean", BuildDate:"2018-01-04T11:40:06Z", GoVersion:"go1.9.2", Compiler:"gc", Platform:"linux/amd64"}
-[root@iZod5e1vrxu935Z bin]# kubectl get nodes
+[root@k8s-master bin]# kubectl get nodes
 NAME            STATUS    ROLES     AGE       VERSION
 172.17.90.213   Ready     <none>    14s       v1.9.1
