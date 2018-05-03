@@ -2,8 +2,14 @@
 ## Master节点部署
 ### 环境参数
 OS CentOS 7
+
 kubernetes 1.9.1
+
 etcd 3.2.9
+
+IP 
+master 172.17.172.197
+node   172.17.90.213
 
 ### 部署详情
 #### 1、更新内核
