@@ -136,6 +136,8 @@ ETCD_ADVERTISE_CLIENT_URLS="http://172.17.172.197:2379"
 #### 5、Kubernetes 配置
 ```
 [root@iZod5e1vrxu935Z kubernetes]# ./cluster/get-kube-binaries.sh
+[root@iZod5e1vrxu935Z kubernetes]# tar -xzvf server/kubernetes-server-linux-amd64.tar.gz 
+
 ```
 ##### 1)kube-apiserver 配置
 ```
