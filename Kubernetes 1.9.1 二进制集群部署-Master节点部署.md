@@ -75,6 +75,7 @@ ETCD_NAME="default"
 #
 #[Clustering]
 #ETCD_INITIAL_ADVERTISE_PEER_URLS="http://localhost:2380"
+#########注意修改为主机ip#######################
 ETCD_ADVERTISE_CLIENT_URLS="http://172.17.172.197:2379"
 #ETCD_DISCOVERY=""
 #ETCD_DISCOVERY_FALLBACK="proxy"
