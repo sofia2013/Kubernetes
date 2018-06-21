@@ -21,10 +21,12 @@ node   172.17.90.213
 [root@k8s-master ~]# systemctl disable firewalld
 [root@k8s-master ~]# systemctl stop firewalld
 ```
-#### 3、下载二进制安装文件
+#### 3、下载并解压缩二进制安装文件
 ```
 [root@k8s-master ~]# wget https://github.com/kubernetes/kubernetes/releases/download/v1.9.1/kubernetes.tar.gz
+[root@k8s-master ~]# tar -xzvf kubernetes.tar.gz
 [root@k8s-master ~]# wget https://github.com/coreos/etcd/releases/download/v3.2.9/etcd-v3.2.9-linux-amd64.tar.gz
+[root@k8s-master ~]# tar -xzvf etcd-v3.2.9-linux-amd64.tar.gz
 ```
 #### 4、Etcd配置
 ```
