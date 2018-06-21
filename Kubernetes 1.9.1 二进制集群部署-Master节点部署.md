@@ -134,7 +134,9 @@ ETCD_ADVERTISE_CLIENT_URLS="http://172.17.172.197:2379"
 [root@iZod5e1vrxu935Z etcd-v3.2.9-linux-amd64]# etcdctl cluster-health
 ```
 #### 5、Kubernetes 配置
-
+```
+[root@iZod5e1vrxu935Z kubernetes]# ./cluster/get-kube-binaries.sh
+```
 ##### 1)kube-apiserver 配置
 ```
 [root@iZod5e1vrxu935Z bin]# cp kube-apiserver /usr/bin
