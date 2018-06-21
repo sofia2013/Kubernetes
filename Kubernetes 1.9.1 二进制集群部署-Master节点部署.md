@@ -127,24 +127,24 @@ ETCD_ADVERTISE_CLIENT_URLS="http://172.17.172.197:2379"
 #ETCD_AUTH_TOKEN="simple"
 ```
 ```
-[root@iZod5e1vrxu935Z etcd-v3.2.9-linux-amd64]# systemctl daemon-reload
-[root@iZod5e1vrxu935Z etcd-v3.2.9-linux-amd64]# systemctl enable etcd.service
-[root@iZod5e1vrxu935Z etcd-v3.2.9-linux-amd64]# systemctl start etcd.service
-[root@iZod5e1vrxu935Z etcd-v3.2.9-linux-amd64]# systemctl status etcd.service
-[root@iZod5e1vrxu935Z etcd-v3.2.9-linux-amd64]# etcdctl cluster-health
+[root@k8s-master etcd-v3.2.9-linux-amd64]# systemctl daemon-reload
+[root@k8s-master etcd-v3.2.9-linux-amd64]# systemctl enable etcd.service
+[root@k8s-master etcd-v3.2.9-linux-amd64]# systemctl start etcd.service
+[root@k8s-master etcd-v3.2.9-linux-amd64]# systemctl status etcd.service
+[root@k8s-master etcd-v3.2.9-linux-amd64]# etcdctl cluster-health
 ```
 #### 5、Kubernetes 配置
 ```
-[root@iZod5e1vrxu935Z kubernetes]# ./cluster/get-kube-binaries.sh
-[root@iZod5e1vrxu935Z kubernetes]# tar -xzvf server/kubernetes-server-linux-amd64.tar.gz 
+[root@k8s-master kubernetes]# ./cluster/get-kube-binaries.sh
+[root@k8s-master kubernetes]# tar -xzvf server/kubernetes-server-linux-amd64.tar.gz 
 
 ```
 ##### 1)kube-apiserver 配置
 ```
-[root@iZod5e1vrxu935Z bin]# cp kube-apiserver /usr/bin
-[root@iZod5e1vrxu935Z bin]# cp kube-controller-manager /usr/bin
-[root@iZod5e1vrxu935Z bin]# cp kube-scheduler /usr/bin
-[root@iZod5e1vrxu935Z bin]# vim /usr/lib/systemd/system/kube-apiserver.service
+[root@k8s-master bin]# cp kube-apiserver /usr/bin
+[root@k8s-master bin]# cp kube-controller-manager /usr/bin
+[root@k8s-master bin]# cp kube-scheduler /usr/bin
+[root@k8s-master bin]# vim /usr/lib/systemd/system/kube-apiserver.service
 ```
 ```
 [Unit]
@@ -170,7 +170,8 @@ LimitNOFILE=65536
 WantedBy=multi-user.target
 ```
 ```
-[root@k8s-master  bin]# vim /etc/kubernetes/apiserver
+[root@k8s-master bin]# mkdir -p /etc/kubernetes
+[root@k8s-master bin]# vim /etc/kubernetes/apiserver
 ```
 ```
 KUBE_API_ADDRESS="--insecure-bind-address=0.0.0.0"
